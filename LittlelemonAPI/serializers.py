@@ -10,6 +10,8 @@ class CategoryItemsSerializer(serializers.ModelSerializer):
         model = Category
         fields = ['slug', 'title', 'id']
 
+# added HyperlinkedModelSerializer
+
 
 class MenuItemSerializer(serializers.HyperlinkedModelSerializer):
     stock = serializers.IntegerField(source='inventory')
