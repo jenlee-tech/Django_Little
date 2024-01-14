@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from rest_framework import generics
+from rest_framework import generics, status
 from .models import MenuItem, Category
 from .serializers import MenuItemSerializer
 from .serializers import CategoryItemsSerializer
@@ -33,13 +33,19 @@ class CategoryItemsView(generics.ListCreateAPIView):
     serializer_class = CategoryItemsSerializer
 
 
-@api_view()
+@api_view(['GET', 'POST'])
 def menu_items(request):
-    items = MenuItem.objects.select_related('category').all()
-    # serialized_item = MenuItemSerializer(items, many=True)
-    serialized_item = MenuItemSerializer(
-        items, many=True, context={'request': request})
-    return Response(serialized_item.data)
+    if request.method == 'GET':
+        items = MenuItem.objects.select_related('category').all()
+        serialized_item = MenuItemSerializer(items, many=True)
+        # serialized_item = MenuItemSerializer(
+        #     items, many=True, context={'request': request})
+        return Response(serialized_item.data)
+    if request.method == 'POST':
+        serialized_item = MenuItemSerializer(data=request.data)
+        serialized_item.is_valid(raise_exception=True)
+        serialized_item.save()
+        return Response(serialized_item.data, status.HTTP_201_CREATED)
 
 
 @api_view()

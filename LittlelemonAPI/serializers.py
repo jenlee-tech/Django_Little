@@ -13,14 +13,15 @@ class CategoryItemsSerializer(serializers.ModelSerializer):
 # added HyperlinkedModelSerializer
 
 
-class MenuItemSerializer(serializers.HyperlinkedModelSerializer):
+class MenuItemSerializer(serializers.ModelSerializer):
     stock = serializers.IntegerField(source='inventory')
 
     price_after_tax = serializers.SerializerMethodField(
         method_name='calculate_tax')
 
     # category = serializers.StringRelatedField()
-    # category = CategoryItemsSerializer()
+    category = CategoryItemsSerializer(read_only=True)
+    category_id = serializers.IntegerField(write_only=True)
     # category = serializers.HyperlinkedRelatedField(
     #     queryset=Category.objects.all(),
     #     view_name='category-detail'
@@ -29,7 +30,7 @@ class MenuItemSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = MenuItem
         fields = ['id', 'title', 'price', 'stock',
-                  'price_after_tax', 'category']
+                  'price_after_tax', 'category', 'category_id']
         depth = 1
 
     def calculate_tax(self, product: MenuItem):
