@@ -7,7 +7,8 @@ from .serializers import CategoryItemsSerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
-
+from rest_framework.renderers import JSONRenderer
+# from rest_framework import status
 
 # Create your views here.
 # # using generic view classes of drf
@@ -37,6 +38,18 @@ class CategoryItemsView(generics.ListCreateAPIView):
 def menu_items(request):
     if request.method == 'GET':
         items = MenuItem.objects.select_related('category').all()
+        category_name = request.query_params.get('category')
+        to_price = request.query_params.get('to_price')
+        search = request.query_params.get('search')
+        if category_name:
+            items = items.filter(category__title=category_name)
+        if to_price:
+            # items = items.filter(price__lte=to_price)
+            # lte - is conditional operator that means less than or equal to
+            items = items.filter(price=to_price)
+        if search:
+            items = items.filter(title__icontains=search)
+
         serialized_item = MenuItemSerializer(items, many=True)
         # serialized_item = MenuItemSerializer(
         #     items, many=True, context={'request': request})

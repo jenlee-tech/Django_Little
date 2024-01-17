@@ -6,7 +6,7 @@ class Category(models.Model):
     title = models.CharField(max_length=255)
 
     def _str_(self) -> str:
-        return self.name
+        return self.title
 
 
 class MenuItem(models.Model):
