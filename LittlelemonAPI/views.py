@@ -8,7 +8,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from rest_framework.renderers import JSONRenderer
-# from rest_framework import status
+from rest_framework import status
 
 # Create your views here.
 # # using generic view classes of drf
@@ -41,6 +41,8 @@ def menu_items(request):
         category_name = request.query_params.get('category')
         to_price = request.query_params.get('to_price')
         search = request.query_params.get('search')
+        ordering = request.query_params.get('ordering')
+
         if category_name:
             items = items.filter(category__title=category_name)
         if to_price:
@@ -49,6 +51,10 @@ def menu_items(request):
             items = items.filter(price=to_price)
         if search:
             items = items.filter(title__icontains=search)
+            # the i in icontains makes it case insensitive
+
+        if ordering:
+            items = items.order_by(ordering)
 
         serialized_item = MenuItemSerializer(items, many=True)
         # serialized_item = MenuItemSerializer(
