@@ -15,7 +15,8 @@ class CategoryItemsSerializer(serializers.ModelSerializer):
 
 class MenuItemSerializer(serializers.ModelSerializer):
     stock = serializers.IntegerField(source='inventory')
-
+    price = serializers.DecimalField(
+        max_digits=6, decimal_places=2, min_value=2)
     price_after_tax = serializers.SerializerMethodField(
         method_name='calculate_tax')
 
