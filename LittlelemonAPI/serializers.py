@@ -28,15 +28,24 @@ class MenuItemSerializer(serializers.ModelSerializer):
     #     view_name='category-detail'
     # )
 
+    def validate_price(self, value):
+        if (value < 2):
+            raise serializers.ValidationError(
+                'Hello !!! Price should not be less than 2.0')
+
+    def validate_stock(self, value):
+        if (value < 0):
+            raise serializers.ValidationError('Stock cannot be negative')
+
     class Meta:
         model = MenuItem
         fields = ['id', 'title', 'price', 'stock',
                   'price_after_tax', 'category', 'category_id']
         depth = 1
-        extra_kwargs = {
-            'price': {'min_value': 2},
-            'stock': {'source': 'inventory', 'min_value': 0}
-        }
+        # extra_kwargs = {
+        #     'price': {'min_value': 2},
+        #     'stock': {'source': 'inventory', 'min_value': 0}
+        # }
 
     def calculate_tax(self, product: MenuItem):
         return product.price * Decimal(1.1)
