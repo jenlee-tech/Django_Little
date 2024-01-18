@@ -3,6 +3,7 @@ from .models import MenuItem, Category
 from decimal import Decimal
 from .models import Category
 from rest_framework.validators import UniqueValidator
+import bleach
 # another example
 
 
@@ -30,6 +31,7 @@ class MenuItemSerializer(serializers.ModelSerializer):
     # )
 
     def validate(self, attrs):
+        attrs['title'] = bleach.clean(attrs['title'])
         if (attrs['price'] < 2):
             raise serializers.ValidationError(
                 'Beware! Price should not be less than 2.0')
