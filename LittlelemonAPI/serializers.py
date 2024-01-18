@@ -15,8 +15,8 @@ class CategoryItemsSerializer(serializers.ModelSerializer):
 
 class MenuItemSerializer(serializers.ModelSerializer):
     stock = serializers.IntegerField(source='inventory')
-    price = serializers.DecimalField(
-        max_digits=6, decimal_places=2, min_value=2)
+    # price = serializers.DecimalField(
+    # max_digits=6, decimal_places=2, min_value=2)
     price_after_tax = serializers.SerializerMethodField(
         method_name='calculate_tax')
 
@@ -33,6 +33,10 @@ class MenuItemSerializer(serializers.ModelSerializer):
         fields = ['id', 'title', 'price', 'stock',
                   'price_after_tax', 'category', 'category_id']
         depth = 1
+        extra_kwargs = {
+            'price': {'min_value': 2},
+            'stock': {'source': 'inventory', 'min_value': 0}
+        }
 
     def calculate_tax(self, product: MenuItem):
         return product.price * Decimal(1.1)
