@@ -21,7 +21,7 @@ class MenuItemsViewSet(viewsets.ModelViewSet):
     queryset = MenuItem.objects.all()
     serializer_class = MenuItemSerializer
     ordering_fields = ['price', 'inventory']
-    search_fields = ['title']
+    search_fields = ['title', 'category__title']
 
 # class SingleMenuItemView(generics.RetrieveUpdateAPIView, generics.DestroyAPIView):
 #     queryset = MenuItem.objects.all()
