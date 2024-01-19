@@ -11,17 +11,21 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework import status
 from django.core.paginator import Paginator, EmptyPage
 
-# Create your views here.
-# # using generic view classes of drf
+from rest_framework.response import Response
+from rest_framework import viewsets
+from .models import MenuItem
+from .serializers import MenuItemSerializer
 
-# class MenuItemsView(generics.ListCreateAPIView):
-#     queryset = MenuItem.objects.all()
-#     serializer_class = MenuItemSerializer
 
+class MenuItemsViewSet(viewsets.ModelViewSet):
+    queryset = MenuItem.objects.all()
+    serializer_class = MenuItemSerializer
+    ordering_fields = ['price', 'inventory']
 
 # class SingleMenuItemView(generics.RetrieveUpdateAPIView, generics.DestroyAPIView):
 #     queryset = MenuItem.objects.all()
 #     serializer_class = MenuItemSerializer
+
 
 @api_view()
 def category_detail(request, pk):
