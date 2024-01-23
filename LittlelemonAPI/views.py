@@ -19,6 +19,7 @@ from .serializers import MenuItemSerializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import permission_classes
 from rest_framework.throttling import AnonRateThrottle
+from rest_framework.throttling import UserRateThrottle
 
 
 class MenuItemsViewSet(viewsets.ModelViewSet):
@@ -114,3 +115,10 @@ def manager_view(request):
 @throttle_classes([AnonRateThrottle])
 def throttle_check(request):
     return Response({"message": "throttle is successful"})
+
+
+@api_view()
+@permission_classes([IsAuthenticated])
+@throttle_classes([UserRateThrottle])
+def throttle_check_auth(request):
+    return Response({"message": "this throttling is for authenticated users"})
