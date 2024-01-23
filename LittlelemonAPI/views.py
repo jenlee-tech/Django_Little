@@ -3,7 +3,7 @@ from rest_framework import generics, status
 from .models import MenuItem, Category
 from .serializers import MenuItemSerializer
 from .serializers import CategoryItemsSerializer
-
+from .throttles import TenCallsPerMinute
 from rest_framework.decorators import api_view, permission_classes, throttle_classes
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
@@ -119,6 +119,6 @@ def throttle_check(request):
 
 @api_view()
 @permission_classes([IsAuthenticated])
-@throttle_classes([UserRateThrottle])
+@throttle_classes([TenCallsPerMinute])
 def throttle_check_auth(request):
     return Response({"message": "this throttling is for authenticated users"})
