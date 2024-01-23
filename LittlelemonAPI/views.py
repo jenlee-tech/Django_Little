@@ -4,7 +4,7 @@ from .models import MenuItem, Category
 from .serializers import MenuItemSerializer
 from .serializers import CategoryItemsSerializer
 
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes, throttle_classes
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from rest_framework.renderers import JSONRenderer
@@ -18,6 +18,7 @@ from .serializers import MenuItemSerializer
 
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import permission_classes
+from rest_framework.throttling import AnonRateThrottle
 
 
 class MenuItemsViewSet(viewsets.ModelViewSet):
@@ -107,3 +108,9 @@ def manager_view(request):
         return Response({"message": "Success! = The manager should see this"})
     else:
         return Response({"message": "This is only for the manager to see"}, 403)
+
+
+@api_view()
+@throttle_classes([AnonRateThrottle])
+def throttle_check(request):
+    return Response({"message": "throttle is successful"})
