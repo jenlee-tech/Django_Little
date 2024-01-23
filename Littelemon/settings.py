@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'DebugExampleApp',
     'rest_framework',
     'rest_framework.authtoken',
-    'LittlelemonAPI'
+    'LittlelemonAPI',
+    'djoser',
 ]
 
 MIDDLEWARE = [
@@ -141,6 +142,7 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 2,
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
     ),
     'DEFAULT_THROTTLE_RATES': {
         'anon': '2/minute',
@@ -150,5 +152,9 @@ REST_FRAMEWORK = {
     'DEFAULT_THROTTLE_CLASSES': [
         'rest_framework.throttling.AnonRateThrottle',
         'rest_framework.throttling.UserRateThrottle'
-    ],
+    ]
+}
+DJOSER = {
+    "USER_ID_FIELD": "username"
+}    
 }
