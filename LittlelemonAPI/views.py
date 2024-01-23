@@ -24,13 +24,14 @@ from rest_framework.throttling import UserRateThrottle
 
 class MenuItemsViewSet(viewsets.ModelViewSet):
     # throttle_classes = [AnonRateThrottle, UserRateThrottle]
+    # throttle_classes = [TenCallsPerMinute]
     queryset = MenuItem.objects.all()
     serializer_class = MenuItemSerializer
     ordering_fields = ['price', 'inventory']
     search_fields = ['title', 'category__title']
 
     def get_throttles(self):
-        if self.action == 'create':
+        if self.action == 'create':  # *this is for a POST request
             throttle_classes = [UserRateThrottle]
         else:
             throttle_classes = []
