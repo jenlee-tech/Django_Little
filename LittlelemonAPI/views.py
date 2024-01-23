@@ -23,6 +23,7 @@ from rest_framework.throttling import UserRateThrottle
 
 
 class MenuItemsViewSet(viewsets.ModelViewSet):
+    throttle_classes = [AnonRateThrottle, UserRateThrottle]
     queryset = MenuItem.objects.all()
     serializer_class = MenuItemSerializer
     ordering_fields = ['price', 'inventory']
