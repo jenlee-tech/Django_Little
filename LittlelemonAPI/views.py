@@ -23,11 +23,18 @@ from rest_framework.throttling import UserRateThrottle
 
 
 class MenuItemsViewSet(viewsets.ModelViewSet):
-    throttle_classes = [AnonRateThrottle, UserRateThrottle]
+    # throttle_classes = [AnonRateThrottle, UserRateThrottle]
     queryset = MenuItem.objects.all()
     serializer_class = MenuItemSerializer
     ordering_fields = ['price', 'inventory']
     search_fields = ['title', 'category__title']
+
+    def get_throttles(self):
+        if self.action == 'create':
+            throttle_classes = [UserRateThrottle]
+        else:
+            throttle_classes = []
+        return [throttle() for throttle in throttle_classes]
 
 # class SingleMenuItemView(generics.RetrieveUpdateAPIView, generics.DestroyAPIView):
 #     queryset = MenuItem.objects.all()
